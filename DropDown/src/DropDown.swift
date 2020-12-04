@@ -1061,7 +1061,8 @@ extension DropDown: UITableViewDataSource, UITableViewDelegate {
 		if index >= 0 && index < localizationKeysDataSource.count {
 			cell.accessibilityIdentifier = localizationKeysDataSource[index]
 		}
-		
+        cell.optionLabel.numberOfLines = 0
+        cell.optionLabel.lineBreakMode = .byWordWrapping
 		cell.optionLabel.textColor = textColor
 		cell.optionLabel.font = textFont
 		cell.selectedBackgroundColor = selectionBackgroundColor
@@ -1076,6 +1077,14 @@ extension DropDown: UITableViewDataSource, UITableViewDelegate {
 		
 		customCellConfiguration?(index, dataSource[index], cell)
 	}
+    
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+
+    public func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return cellHeight
+    }
 
 	public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.isSelected = selectedRowIndices.first{ $0 == (indexPath as NSIndexPath).row } != nil
