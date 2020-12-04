@@ -15,6 +15,5 @@ let package = Package(
             resources: [
                 .process("resources/DropDownCell.xib")
             ])
-        )
     ]
 )
