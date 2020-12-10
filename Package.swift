@@ -1,7 +1,7 @@
 // swift-tools-version:5.3
 import PackageDescription
 
-let package = Package(
+/*let package = Package(
     name: "DropDown",
     platforms: [ .iOS(.v9) ],
     products: [
@@ -16,4 +16,16 @@ let package = Package(
                 .process("resources/DropDownCell.xib")
             ])
     ]
+)*/
+
+let package =   Package(
+  name: "DropDown",
+  platforms: [.iOS(.v9)],
+  products: [
+    .library(name: "DropDown", targets: ["DropDown"]),
+  ],
+  targets: [
+    .target(name: "DropDown", path: "DropDown")
+  ],
+  swiftLanguageVersions: [.v5]
 )
