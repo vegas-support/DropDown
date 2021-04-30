@@ -439,6 +439,9 @@ public final class DropDown: UIView {
 			}
 		}
 	}
+    
+    public var headerText: String?
+    public var headerTextFont: UIFont?
 
 	fileprivate var minHeight: CGFloat {
 		return tableView.rowHeight
@@ -513,6 +516,7 @@ private extension DropDown {
 		}
 
 		tableView.rowHeight = cellHeight
+        tableView.sectionHeaderHeight = 30
 		setHiddentState()
 		isHidden = true
 
@@ -1019,7 +1023,11 @@ extension DropDown {
 
 	/// Returns the height needed to display all cells.
 	fileprivate var tableHeight: CGFloat {
-		return tableView.rowHeight * CGFloat(dataSource.count)
+        var headerHeight = CGFloat(0)
+        if headerText != nil {
+            headerHeight = tableView.sectionHeaderHeight
+        }
+        return tableView.rowHeight * CGFloat(dataSource.count) + headerHeight
 	}
 
     //MARK: Objective-C methods for converting the Swift type Index
@@ -1131,7 +1139,17 @@ extension DropDown: UITableViewDataSource, UITableViewDelegate {
         hide()
     
 	}
-
+    
+    public func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let header = view as? UITableViewHeaderFooterView else { return }
+        header.textLabel?.textColor = textColor
+        header.textLabel?.font = headerTextFont
+        header.contentView.backgroundColor = backgroundColor
+    }
+    
+    public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return headerText
+    }
 }
 
 //MARK: - Auto dismiss
