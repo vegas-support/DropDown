@@ -81,7 +81,7 @@ public final class DropDown: UIView {
 	//MARK: UI
 	fileprivate let dismissableView = UIView()
 	fileprivate let tableViewContainer = UIView()
-	fileprivate let tableView = UITableView()
+	fileprivate let tableView = UITableView(frame: CGRect.zero, style: .grouped)
 	fileprivate var templateCell: DropDownCell!
     fileprivate lazy var arrowIndication: UIImageView = {
         UIGraphicsBeginImageContextWithOptions(CGSize(width: 20, height: 10), false, 0)
@@ -140,6 +140,14 @@ public final class DropDown: UIView {
     DropDown applies this offset only if keyboard is hidden.
     */
     public var offsetFromWindowBottom = CGFloat(0) {
+        didSet { setNeedsUpdateConstraints() }
+    }
+    
+    /**
+    The offset from the bottom of the window when the drop down is shown below the anchor view.
+    DropDown applies this offset only if keyboard is hidden.
+    */
+    public var offsetFromWindowTop = CGFloat(20) {
         didSet { setNeedsUpdateConstraints() }
     }
     
@@ -517,6 +525,9 @@ private extension DropDown {
 
 		tableView.rowHeight = cellHeight
         tableView.sectionHeaderHeight = 30
+        //Remove extra margin with grouped tableview style
+        tableView.tableHeaderView = UIView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: tableView.frame.size.width, height: .leastNormalMagnitude)))
+
 		setHiddentState()
 		isHidden = true
 
@@ -1051,6 +1062,14 @@ extension DropDown {
 //MARK: - UITableViewDataSource - UITableViewDelegate
 
 extension DropDown: UITableViewDataSource, UITableViewDelegate {
+    
+    public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+            return CGFloat.leastNormalMagnitude
+        }
+
+    public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+            return UIView()
+        }
 
 	public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return dataSource.count
